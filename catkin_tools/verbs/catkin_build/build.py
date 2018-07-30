@@ -95,7 +95,13 @@ def determine_packages_to_be_built(packages, context, workspace_packages):
     # Determine the packages to be built
     if packages:
         # First assert all of the packages given are in the workspace
-        workspace_package_names = dict([(pkg.name, (path, pkg)) for path, pkg in ordered_packages])
+        #workspace_package_names = dict([(pkg.name, (path, pkg)) for path, pkg in ordered_packages])
+        workspace_package_names = []
+        for path, pkg in ordered_packages:
+            if not path:
+                print("Check if package '{}' includes circular dependency.".format(pkg))
+            workspace_package_names.append((pkg.name, (path, pkg)))
+        dict(workspace_package_names)
         for package in packages:
             if package not in workspace_package_names:
                 sys.exit("[build] Given package '{0}' is not in the workspace".format(package))
